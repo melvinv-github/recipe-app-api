@@ -61,3 +61,17 @@ class PublicUserApiTests(TestCase):
         user_exists = get_user_model().objects.filter(
             email=payload['email']).exists()
         self.assertFalse(user_exists)
+
+    def test_password_too_long_error(self):
+        """Test an error is returned if password is more than 32 chars."""
+        payload = {
+            'email': 'test@example.com',
+            'password': 'pw' * 32,
+            'name': 'Test name',
+        }
+        res = self.client.post(CREATE_USER_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        user_exists = get_user_model().objects.filter(
+            email=payload['email']).exists()
+        self.assertFalse(user_exists)
