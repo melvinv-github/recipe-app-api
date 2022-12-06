@@ -83,7 +83,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test list of recipes is limited to authenticated user."""
-        other_user = create_user(email="other@example.com", password="password123")
+        other_user = create_user(
+            email="other@example.com",
+            password="password123",
+        )
         create_recipe(user=other_user)
         create_recipe(user=self.user)
 
@@ -214,7 +217,10 @@ class PrivateRecipeAPITests(TestCase):
         recipe = recipes[0]
         self.assertEqual(recipe.tags.count(), 2)
         for tag in payload["tags"]:
-            exists = recipe.tags.filter(name=tag["name"], user=self.user).exists()
+            exists = recipe.tags.filter(
+                name=tag["name"],
+                user=self.user,
+            ).exists()
             self.assertTrue(exists)
 
     def test_create_recipe_with_existing_tags(self):
@@ -235,7 +241,10 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(recipe.tags.count(), 2)
         self.assertIn(tag_indian, recipe.tags.all())
         for tag in payload["tags"]:
-            exists = recipe.tags.filter(name=tag["name"], user=self.user).exists()
+            exists = recipe.tags.filter(
+                name=tag["name"],
+                user=self.user,
+            ).exists()
             self.assertTrue(exists)
 
     def test_create_tag_on_update(self):
